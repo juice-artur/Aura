@@ -36,6 +36,9 @@ private:
 	void AbilityInputTagPressed(FGameplayTag InputTag);
 	void AbilityInputTagReleased(FGameplayTag InputTag);
 	void AbilityInputTagHeld(FGameplayTag InputTag);
+	
+	void ShiftPressed();
+	void ShiftReleased();
 
 	UAuraAbilitySystemComponent* GetAbilitySystemComponent();
 
@@ -50,6 +53,9 @@ private:
 
 	UPROPERTY(EditAnywhere, Category = "Input")
 	TObjectPtr<UInputAction> MoveAction;
+
+	UPROPERTY(EditAnywhere, Category = "Input")
+	TObjectPtr<UInputAction> ShiftAction;
 
 	UPROPERTY(EditAnywhere, Category = "Input")
 	TObjectPtr<UAuraInputConfig> InputConfig;
@@ -68,5 +74,7 @@ private:
 	float ShortPressThreshold = 0.5f;
 	bool bAutoRunning = false;
 	bool bTargeting = false;
+
+	bool bIsShiftPressed = false;
 };
 

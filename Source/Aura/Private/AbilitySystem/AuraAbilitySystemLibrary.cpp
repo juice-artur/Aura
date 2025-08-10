@@ -59,16 +59,14 @@ UAttributeMenuWidgetController* UAuraAbilitySystemLibrary::GetAttributeMenuWidge
 
 void UAuraAbilitySystemLibrary::InitializeDefaultAttributes(const UObject* WorldContextObject, ECharacterClass CharacterClass, float Level, UAbilitySystemComponent* ASC)
 {
-	auto* AuraGameMode = Cast<AAuraGameModeBase>(UGameplayStatics::GetGameMode(WorldContextObject));
-	if (!AuraGameMode)
+	AActor* AvatarActor = ASC->GetAvatarActor();
+	
+	UCharacterClassInfo* CharacterClassInfo = GetCharacterClassInfo(WorldContextObject);
+	if (!CharacterClassInfo)
 	{
 		return;
 	}
-	
-	UCharacterClassInfo* CharacterClassInfo = AuraGameMode->CharacterClassInfo;
 	const FCharacterClassDefaultInfo ClassDefaultInfo = CharacterClassInfo->GetClassDefaultInfo(CharacterClass);
-
-	AActor* AvatarActor = ASC->GetAvatarActor();
 	
 	FGameplayEffectContextHandle PrimaryAttributesContextHandle = ASC->MakeEffectContext();
 	PrimaryAttributesContextHandle.AddSourceObject(AvatarActor);
@@ -88,16 +86,26 @@ void UAuraAbilitySystemLibrary::InitializeDefaultAttributes(const UObject* World
 
 void UAuraAbilitySystemLibrary::GiveStartupAbilities(const UObject* WorldContextObject, UAbilitySystemComponent* ASC)
 {
-	auto* AuraGameMode = Cast<AAuraGameModeBase>(UGameplayStatics::GetGameMode(WorldContextObject));
-	if (!AuraGameMode)
+	UCharacterClassInfo* CharacterClassInfo = GetCharacterClassInfo(WorldContextObject);
+	if (!CharacterClassInfo)
 	{
 		return;
 	}
-
-	UCharacterClassInfo* CharacterClassInfo = AuraGameMode->CharacterClassInfo;
+	
 	for (TSubclassOf<UGameplayAbility> AbilityClass : CharacterClassInfo->CommonAbilities)
 	{
 		FGameplayAbilitySpec AbilitySpec = FGameplayAbilitySpec(AbilityClass, 1);
 		ASC->GiveAbility(AbilitySpec);
 	}
+}
+
+UCharacterClassInfo* UAuraAbilitySystemLibrary::GetCharacterClassInfo(const UObject* WorldContextObject)
+{
+	auto* AuraGameMode = Cast<AAuraGameModeBase>(UGameplayStatics::GetGameMode(WorldContextObject));
+	if (!AuraGameMode)
+	{
+		return nullptr;
+	}
+
+	return AuraGameMode->CharacterClassInfo;
 }

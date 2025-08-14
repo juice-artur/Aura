@@ -176,7 +176,7 @@ void UAuraAttributeSet::ShowFloatingText(const FEffectProperties& Props, float D
 
 		if (PC)
 		{
-			PC->ShowDamageNumber(Damage, Props.TargetCharacter);
+			PC->ShowDamageNumber(Damage, Props.TargetCharacter, bBlockedHit, bCriticalHit);
 		}
 	}
 }

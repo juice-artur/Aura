@@ -118,12 +118,18 @@ void FAuraGameplayTags::InitializeNativeGameplayTags()
 	);
 
 	GameplayTags.Damage = UGameplayTagsManager::Get().AddNativeGameplayTag(
-	FName("Damage"),
-	FString("Damage")
+		FName("Damage"),
+		FString("Damage")
 	);
 
+	GameplayTags.Damage_Fire = UGameplayTagsManager::Get().AddNativeGameplayTag(
+		FName("Damage.Fire"),
+		FString("Fire Damage Type")
+	);
+	GameplayTags.DamageTypes.Add(GameplayTags.Damage_Fire);
+
 	GameplayTags.Effects_HitReact = UGameplayTagsManager::Get().AddNativeGameplayTag(
-	FName("Effects.HitReact"),
-	FString("Tag granted when Hit Reacting")
+		FName("Effects.HitReact"),
+		FString("Tag granted when Hit Reacting")
 	);
 }

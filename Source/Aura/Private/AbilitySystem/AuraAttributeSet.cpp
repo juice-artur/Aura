@@ -182,9 +182,7 @@ void UAuraAttributeSet::ShowFloatingText(const FEffectProperties& Props, float D
 {
 	if (Props.SourceAvatarActor != Props.TargetAvatarActor)
 	{
-		auto* PC = Cast<AAuraPlayerController>(UGameplayStatics::GetPlayerController(
-			Props.SourceCharacter,
-			0));
+		auto* PC = Cast<AAuraPlayerController>(Props.SourceCharacter->Controller);
 
 		if (PC)
 		{

@@ -22,9 +22,6 @@ public:
 	AAuraCharacterBase();
 	virtual UAbilitySystemComponent* GetAbilitySystemComponent() const override;
 	UAttributeSet* GetAttributeSet() const;
-	
-	virtual UAnimMontage* GetHitReactMontage_Implementation() override;
-	virtual void Die() override;
 
 	UFUNCTION(NetMulticast, Reliable)
 	virtual void MulticastHandleDeath();
@@ -45,7 +42,13 @@ protected:
 	UFUNCTION(BlueprintImplementableEvent)
 	void StartWeaponDissolveTimeline(UMaterialInstanceDynamic* DynamicMaterialInstance);
 	
+	/** Combat Interface */
+	virtual UAnimMontage* GetHitReactMontage_Implementation() override;	
+	virtual void Die() override;	
 	virtual FVector GetCombatSocketLocation_Implementation() override;
+	virtual bool IsDead_Implementation() const override;
+	virtual AActor* GetAvatar_Implementation() override;
+	/** end Combat Interface */
 	
 protected:
 	UPROPERTY(EditAnywhere, Category = "Combat")
@@ -76,6 +79,8 @@ protected:
 	UPROPERTY(BlueprintReadOnly, EditAnywhere)
 	TObjectPtr<UMaterialInstance> WeaponDissolveMaterialInstance;
 
+	bool bDead = false;
+	
 private:
 	UPROPERTY(EditAnywhere, Category = "Abilities")
 	TArray<TSubclassOf<UGameplayAbility>> StartupAbilities;

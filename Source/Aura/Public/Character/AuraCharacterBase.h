@@ -45,7 +45,7 @@ protected:
 	UFUNCTION(BlueprintImplementableEvent)
 	void StartWeaponDissolveTimeline(UMaterialInstanceDynamic* DynamicMaterialInstance);
 	
-	virtual FVector GetCombatSocketLocation();
+	virtual FVector GetCombatSocketLocation_Implementation() override;
 	
 protected:
 	UPROPERTY(EditAnywhere, Category = "Combat")

@@ -50,7 +50,7 @@ void AAuraEnemy::PossessedBy(AController* NewController)
 
 	AuraAIController->GetBlackboardComponent()->SetValueAsBool(FName("HitReacting"), false);
 	AuraAIController->GetBlackboardComponent()->SetValueAsBool(FName("RangedAttacker"),
-		CharacterClass != ECharacterClass::Warrior);
+	                                                           CharacterClass != ECharacterClass::Warrior);
 }
 
 void AAuraEnemy::HighlightActor()
@@ -80,6 +80,16 @@ void AAuraEnemy::Die()
 	Super::Die();
 }
 
+void AAuraEnemy::SetCombatTarget_Implementation(AActor* InCombatTarget)
+{
+	CombatTarget = InCombatTarget;
+}
+
+AActor* AAuraEnemy::GetCombatTarget_Implementation() const
+{
+	return CombatTarget;
+}
+
 void AAuraEnemy::BeginPlay()
 {
 	Super::BeginPlay();
@@ -87,7 +97,7 @@ void AAuraEnemy::BeginPlay()
 	InitAbilityActorInfo();
 	if (HasAuthority())
 	{
-		UAuraAbilitySystemLibrary::GiveStartupAbilities(this, AbilitySystemComponent, CharacterClass);	
+		UAuraAbilitySystemLibrary::GiveStartupAbilities(this, AbilitySystemComponent, CharacterClass);
 	}
 
 	auto* AuraUserWidget = Cast<UAuraUserWidget>(HealthBar->GetUserWidgetObject());
@@ -100,21 +110,21 @@ void AAuraEnemy::BeginPlay()
 	if (AuraAS)
 	{
 		AbilitySystemComponent->GetGameplayAttributeValueChangeDelegate(AuraAS->GetHealthAttribute())
-		.AddWeakLambda(this, [this](const FOnAttributeChangeData& Data)
-		{
-			OnHealthChanged.Broadcast(Data.NewValue);
-		});
-		
+		                      .AddWeakLambda(this, [this](const FOnAttributeChangeData& Data)
+		                      {
+			                      OnHealthChanged.Broadcast(Data.NewValue);
+		                      });
+
 		AbilitySystemComponent->GetGameplayAttributeValueChangeDelegate(AuraAS->GetMaxHealthAttribute())
-		.AddWeakLambda(this, [this](const FOnAttributeChangeData& Data)
-		{
-			OnMaxHealthChanged.Broadcast(Data.NewValue);
-		});
+		                      .AddWeakLambda(this, [this](const FOnAttributeChangeData& Data)
+		                      {
+			                      OnMaxHealthChanged.Broadcast(Data.NewValue);
+		                      });
 
 		AbilitySystemComponent->RegisterGameplayTagEvent(FAuraGameplayTags::Get().Effects_HitReact,
-			EGameplayTagEventType::NewOrRemoved)
-		.AddUObject(this, &AAuraEnemy::HitReactTagChanged);
-		
+		                                                 EGameplayTagEventType::NewOrRemoved)
+		                      .AddUObject(this, &AAuraEnemy::HitReactTagChanged);
+
 		OnHealthChanged.Broadcast(AuraAS->GetHealth());
 		OnMaxHealthChanged.Broadcast(AuraAS->GetMaxHealth());
 	}
@@ -127,7 +137,7 @@ void AAuraEnemy::InitAbilityActorInfo()
 
 	if (HasAuthority())
 	{
-		InitializeDefaultAttributes();		
+		InitializeDefaultAttributes();
 	}
 }
 

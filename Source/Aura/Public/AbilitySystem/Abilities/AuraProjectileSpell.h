@@ -2,11 +2,13 @@
 
 #pragma once
 
-#include "AuraDamageGameplayAbility.h"
+#include "CoreMinimal.h"
 #include "AbilitySystem/Abilities/AuraDamageGameplayAbility.h"
 #include "AuraProjectileSpell.generated.h"
 
 class AAuraProjectile;
+class UGameplayEffect;
+struct FGameplayTag;
 
 
 UCLASS()
@@ -19,7 +21,7 @@ protected:
 		const FGameplayAbilityActivationInfo ActivationInfo, const FGameplayEventData* TriggerEventData) override;
 
 	UFUNCTION(BlueprintCallable, Category = "Projectile")
-	void SpawnProjectile(const FVector& ProjectileTargetLocation);
+	void SpawnProjectile(const FVector& ProjectileTargetLocation, const FGameplayTag& SocketTag);
 
 protected:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)

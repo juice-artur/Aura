@@ -35,19 +35,32 @@ void UOverlayWidgetController::BindCallbacksToDependencies()
 	AbilitySystemComponent->GetGameplayAttributeValueChangeDelegate(AuraAttributeSet->GetMaxManaAttribute())
 	.AddUObject(this, &UOverlayWidgetController::MaxManaChanged);
 
-	Cast<UAuraAbilitySystemComponent>(AbilitySystemComponent)->EffectAssetTags.AddLambda(
-		[this](const FGameplayTagContainer& AssetTags)
+	UAuraAbilitySystemComponent* AuraASC = Cast<UAuraAbilitySystemComponent>(AbilitySystemComponent);
+	if (AuraASC)
 	{
-		for (const FGameplayTag& Tag : AssetTags)
+		if (AuraASC->bStartupAbilitiesGiven)
 		{
-			FGameplayTag MessageTag = FGameplayTag::RequestGameplayTag(FName("Message"));
-			if (Tag.MatchesTag(MessageTag))
-			{
-				const auto* Row = GetDataTableRowByTag<FUIWidgetRow>(MessageWidgetDataTable, Tag);
-				MessageWidgetRowDelegate.Broadcast(*Row);	
-			}
+			OnInitializeStartupAbilities(AuraASC);
 		}
-	});
+		else
+		{
+			AuraASC->AbilitiesGivenDelegate.AddUObject(this, &UOverlayWidgetController::OnInitializeStartupAbilities);
+		}
+		
+		AuraASC->EffectAssetTags.AddLambda(
+			[this](const FGameplayTagContainer& AssetTags)
+			{
+				for (const FGameplayTag& Tag : AssetTags)
+				{
+					FGameplayTag MessageTag = FGameplayTag::RequestGameplayTag(FName("Message"));
+					if (Tag.MatchesTag(MessageTag))
+					{
+						const auto* Row = GetDataTableRowByTag<FUIWidgetRow>(MessageWidgetDataTable, Tag);
+						MessageWidgetRowDelegate.Broadcast(*Row);
+					}
+				}
+			});
+	}
 }
 
 void UOverlayWidgetController::HealthChanged(const FOnAttributeChangeData& Data) const
@@ -68,4 +81,13 @@ void UOverlayWidgetController::ManaChanged(const FOnAttributeChangeData& Data) c
 void UOverlayWidgetController::MaxManaChanged(const FOnAttributeChangeData& Data) const
 {
 	OnMaxManaChanged.Broadcast(Data.NewValue);
+}
+
+void UOverlayWidgetController::OnInitializeStartupAbilities(UAuraAbilitySystemComponent* AuraAbilitySystemComponent)
+{
+	//TODO Get information about all given abilities, look up their Ability Info, and broadcast it to widgets.
+	if (!AuraAbilitySystemComponent->bStartupAbilitiesGiven)
+	{
+		return;
+	}
 }

@@ -30,6 +30,9 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 	void SpendPointButtonPressed();
+
+	UFUNCTION(BlueprintCallable)
+	void GlobeDeselect();
 	
 	virtual void BroadcastInitialValues() override;
 	virtual void BindCallbacksToDependencies() override;

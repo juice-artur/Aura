@@ -30,6 +30,7 @@ UAttributeMenuWidgetController* AAuraHUD::GetAttributeMenuWidgetController(const
 	}
 
 	AttributeMenuWidgetController = NewObject<UAttributeMenuWidgetController>(this, AttributeMenuWidgetControllerClass);
+	
 	AttributeMenuWidgetController->SetWidgetControllerParams(Params);
 	AttributeMenuWidgetController->BindCallbacksToDependencies();
 

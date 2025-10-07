@@ -233,6 +233,16 @@ FVector UAuraAbilitySystemLibrary::GetDeathImpulse(const FGameplayEffectContextH
 	return FVector::ZeroVector;
 }
 
+FVector UAuraAbilitySystemLibrary::GetKnockbackForce(const FGameplayEffectContextHandle& EffectContextHandle)
+{
+	const FAuraGameplayEffectContext* AuraEffectContext = static_cast<const FAuraGameplayEffectContext*>(EffectContextHandle.Get());
+	if (AuraEffectContext)
+	{
+		return AuraEffectContext->GetKnockbackForce();
+	}
+	return FVector::ZeroVector;
+}
+
 void UAuraAbilitySystemLibrary::SetIsSuccessfulDebuff(FGameplayEffectContextHandle& EffectContextHandle,
                                                       bool bInSuccessfulDebuff)
 {
@@ -356,6 +366,16 @@ void UAuraAbilitySystemLibrary::SetDeathImpulse(FGameplayEffectContextHandle& Ef
 	}
 }
 
+void UAuraAbilitySystemLibrary::SetKnockbackForce(FGameplayEffectContextHandle& EffectContextHandle,
+	const FVector& InForce)
+{
+	FAuraGameplayEffectContext* AuraEffectContext = static_cast<FAuraGameplayEffectContext*>(EffectContextHandle.Get());
+	if (AuraEffectContext)
+	{
+		AuraEffectContext->SetKnockbackForce(InForce);
+	}
+}
+
 bool UAuraAbilitySystemLibrary::IsNotFriend(AActor* FirstActor, AActor* SecondActor)
 {
 	const bool bBothArePlayers = FirstActor->ActorHasTag(FName("Player")) && SecondActor->ActorHasTag(FName("Player"));
@@ -373,6 +393,8 @@ FGameplayEffectContextHandle UAuraAbilitySystemLibrary::ApplyDamageEffect(const 
 	                                                                      MakeEffectContext();
 	EffectContexthandle.AddSourceObject(SourceAvatarActor);
 	SetDeathImpulse(EffectContexthandle, DamageEffectParams.DeathImpulse);
+	SetKnockbackForce(EffectContexthandle, DamageEffectParams.KnockbackForce);
+	
 	const FGameplayEffectSpecHandle SpecHandle = DamageEffectParams.SourceAbilitySystemComponent->MakeOutgoingSpec(
 		DamageEffectParams.DamageGameplayEffectClass, DamageEffectParams.AbilityLevel, EffectContexthandle);
 

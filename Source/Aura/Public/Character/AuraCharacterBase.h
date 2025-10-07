@@ -26,7 +26,7 @@ public:
 	UAttributeSet* GetAttributeSet() const;
 
 	UFUNCTION(NetMulticast, Reliable)
-	virtual void MulticastHandleDeath();
+	virtual void MulticastHandleDeath(const FVector& DeathImpulse);
 
 protected:
 	virtual void BeginPlay() override;
@@ -46,7 +46,7 @@ protected:
 
 	/** Combat Interface */
 	virtual UAnimMontage* GetHitReactMontage_Implementation() override;
-	virtual void Die() override;
+	virtual void Die(const FVector& DeathImpulse) override;
 	virtual FVector GetCombatSocketLocation_Implementation(const FGameplayTag& MontageTag) override;
 	virtual bool IsDead_Implementation() const override;
 	virtual AActor* GetAvatar_Implementation() override;
